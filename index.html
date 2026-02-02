@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+<style>
+    body {
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        background: white;
+        width: 360px;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    .score {
+        font-weight: bold;
+        color: #ff4d6d;
+        margin-bottom: 10px;
+    }
+
+    .question {
+        font-size: 16px;
+        margin: 15px 0;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin: 7px 0;
+        border: none;
+        border-radius: 12px;
+        background: #ff758f;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #ff4d6d;
+        transform: scale(1.03);
+    }
+
+    .error {
+        color: #ff4d6d;
+        font-size: 13px;
+        margin-top: 10px;
+    }
+
+    .invalid {
+        background: #999;
+    }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+    <div class="score" id="score">Score: 0/4</div>
+    <div class="question" id="question"></div>
+    <div id="choices"></div>
+    <div class="error" id="error"></div>
+</div>
+
+<script>
+let step = 1;
+let score = 0;
+
+const questions = {
+    1: {
+        q: "Where was our first date?",
+        answers: ["Ramen Kuroda", "Peri-Peri", "Pepper Lunch", "Sumu Niku"],
+        correct: 0
+    },
+    2: {
+        q: "What was the first gift I gave you when we started dating?",
+        answers: ["Hoodie", "Shoes", "Tote Bag", "Necklace"],
+        correct: 2
+    },
+    3: {
+        q: "Where do you want to eat next?",
+        answers: ["Japanese", "American", "Filipino", "Anywhere ❤️"],
+        correct: null
+    }
+};
+
+function loadQuestion() {
+    document.getElementById("error").innerText = "";
+    document.getElementById("score").innerText = `Score: ${score}/4`;
+    document.getElementById("question").innerText = questions[step].q;
+
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+
+    questions[step].answers.forEach((ans, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = () => checkAnswer(i);
+        choices.appendChild(btn);
+    });
+}
+
+function checkAnswer(choice) {
+    if (step === 3) {
+        score++;
+        step++;
+        loadValentine();
+        return;
+    }
+
+    if (choice === questions[step].correct) {
+        score++;
+        step++;
+        loadQuestion();
+    } else {
+        document.getElementById("error").innerText =
+            "😤 Wrong answer! Review our memories. Do you hate me or what???";
+    }
+}
+
+function loadValentine() {
+    document.getElementById("score").innerText = `Score: ${score}/4`;
+    document.getElementById("question").innerText = "Will you be my Valentine? 💖";
+
+    document.getElementById("choices").innerHTML = `
+        <button onclick="yes()">YES 💘</button>
+        <button class="invalid" onclick="no()">NO ❌</button>
+    `;
+}
+
+function yes() {
+    score++;
+    document.getElementById("card").innerHTML = `
+        <div class="score">Score: 4/4</div>
+        <h2 style="color:#ff4d6d;">SEE YOU, BABY 💖</h2>
+        <p>
+            Thank you for choosing me.  
+            I can’t wait to spend Valentine’s Day with you.  
+            I love you so much 🥰
+        </p>
+    `;
+}
+
+function no() {
+    alert("❌ Invalid answer. Try again 😌");
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
